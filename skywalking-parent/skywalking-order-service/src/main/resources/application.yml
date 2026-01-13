@@ -1,0 +1,30 @@
+
+myNameSpace: a724171a-f557-4a0f-a2b9-00e890d3d282
+server:
+  port: 8084 # ����΢����˿�
+
+spring:
+  application:
+    name: skywalking-order-service # Ӧ�����ƣ�SkyWalking�������ʾ��
+
+  cloud:
+    # Nacos 基础配置（服务地址）
+    nacos:
+      discovery:
+        server-addr: localhost:8848 # Nacos 服务地址（本地部署，若为集群填写多个地址，用逗号分隔）
+        namespace: ${myNameSpace}
+      config:
+        server-addr: localhost:8848 #nacos作为配置中心地址
+        file-extension: yaml #指定yaml格式的配置
+        group: DEFAULT_GROUP #指定分组
+        namespace: ${myNameSpace} #指定spacename
+
+# SkyWalking ����
+skywalking:
+  agent:
+    service-name: ${spring.application.name}
+    collector:
+      backend-service: 127.0.0.1:11800
+  logging:
+    level:
+      org.apache.skywalking: INFO

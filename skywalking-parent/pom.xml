@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.5</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.example.study</groupId>
+    <artifactId>skywalking-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>skywalking-parent</name>
+    <packaging>pom</packaging>
+    <description>Demo project for Spring Boot</description>
+    <!-- 1. 统一管理版本号（dependencyManagement） -->
+    <properties>
+        <!-- 基础环境配置 -->
+        <java.version>1.8</java.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- 框架版本 -->
+        <spring-boot.version>2.7.5</spring-boot.version>
+        <spring-cloud.version>2021.0.5</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.0.1.0</spring-cloud-alibaba.version>
+<!--        <spring-cloud-alibaba.version>2.1.0.RELEASE</spring-cloud-alibaba.version>-->
+
+        <!-- SkyWalking 版本（兼容 SpringBoot 2.7.5） -->
+        <skywalking.version>8.15.0</skywalking.version>
+    </properties>
+
+    <!-- 依赖版本锁定：子项目直接引用，无需指定版本 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot 父依赖 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Cloud 依赖（适配 SpringBoot 2.7.5） -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Cloud Alibaba 依赖（可选，用于注册中心/配置中心，如Nacos） -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- SkyWalking 监控依赖 -->
+            <!-- Source: https://mvnrepository.com/artifact/org.apache.skywalking/apm-toolkit-trace -->
+            <dependency>
+                <groupId>org.apache.skywalking</groupId>
+                <artifactId>apm-toolkit-trace</artifactId>
+                <version>${skywalking.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Lombok 依赖（稳定版，可根据需求更新版本） -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.30</version>
+                <scope>provided</scope> <!-- provided 表示编译时使用，运行时无需打包（IDE/构建工具已提供支持） -->
+                <optional>true</optional>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- 2. 聚合子模块（modules）：声明所有子项目 -->
+    <modules>
+        <module>skywalking-gateway</module>
+        <module>skywalking-order-service</module>
+        <module>skywalking-pay-service</module>
+        <module>skywalking-stock-service</module>
+    </modules>
+
+    <!-- 3. 公共依赖（可选）：所有子项目都会继承的依赖 -->
+    <dependencies>
+        <!-- Spring Boot 核心起步依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- SkyWalking 核心监控依赖（所有微服务都需要） -->
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+        </dependency>
+
+        <!-- 测试依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- 4. 构建配置（统一编译插件） -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <fork>true</fork>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <mainClass>${start-class}</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
