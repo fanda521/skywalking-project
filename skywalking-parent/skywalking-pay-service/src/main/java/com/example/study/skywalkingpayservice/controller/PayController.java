@@ -22,7 +22,7 @@ public class PayController {
     private PayService payService;
 
     @RequestMapping("/orderPay")
-    public Boolean pay(String orderId, String userId, BigDecimal amt) {
+    public Boolean pay(String orderId, String userId, BigDecimal amt) throws InterruptedException {
         Boolean aBoolean = payService.orderPay(orderId, userId, amt);
         log.info("支付结果：orderId:{},userId:{},amt:{},{}",orderId,userId,amt, aBoolean);
         return aBoolean;

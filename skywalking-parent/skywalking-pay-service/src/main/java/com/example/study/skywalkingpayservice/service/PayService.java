@@ -7,6 +7,7 @@ import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author lucksoul
@@ -28,7 +29,7 @@ public class PayService {
             // 采集方法返回结果（Boolean 类型）
             @Tag(key = "payResult", value = "returnedObj")
     })
-    public Boolean orderPay(String orderId, String userId, BigDecimal amt) {
+    public Boolean orderPay(String orderId, String userId, BigDecimal amt) throws InterruptedException {
         log.info("开始处理订单支付,orderId={},userId={},amt:{}",orderId,userId,amt);
         log.info("处理订单支付-succe,orderId={},userId={},amt:{}",orderId,userId,amt);
 
