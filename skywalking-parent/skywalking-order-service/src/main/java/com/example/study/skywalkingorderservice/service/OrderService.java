@@ -7,6 +7,9 @@ import com.example.study.skywalkingorderservice.openclient.StockOpenFeignClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.skywalking.apm.toolkit.trace.Tag;
+import org.apache.skywalking.apm.toolkit.trace.Tags;
+import org.apache.skywalking.apm.toolkit.trace.Trace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,13 @@ public class OrderService {
     @Autowired
     private StockOpenFeignClient stockOpenFeignClient;
 
+
+    @Trace // 标记该方法被 SkyWalking 追踪，必须添加
+    @Tags({
+            // 采集第一个入参 orderId（下标 0）
+            @Tag(key = "orderEntity", value = "arg[0]"),
+            @Tag(key = "addOrderResult", value = "returnedObj")
+    })
     public String addOrder(OrderEntity orderEntity) throws JsonProcessingException {
         // 1.创建定点
         log.info("创建订单成功:orderEntity={}", objectMapper.writeValueAsString(orderEntity));
