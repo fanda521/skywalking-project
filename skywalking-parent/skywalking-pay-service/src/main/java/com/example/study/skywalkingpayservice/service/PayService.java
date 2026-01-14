@@ -32,6 +32,7 @@ public class PayService {
     public Boolean orderPay(String orderId, String userId, BigDecimal amt) throws InterruptedException {
         log.info("开始处理订单支付,orderId={},userId={},amt:{}",orderId,userId,amt);
         log.info("处理订单支付-succe,orderId={},userId={},amt:{}",orderId,userId,amt);
+        TimeUnit.SECONDS.sleep(2);
 
         return Boolean.TRUE;
     }
